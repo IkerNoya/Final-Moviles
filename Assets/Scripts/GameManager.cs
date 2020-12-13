@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] float distanceAdditive;
     [SerializeField] GameObject victoryScreen;
     [SerializeField] Text maxDistance;
+    [SerializeField] Text distanceToTargetText;
+
 
     public static GameManager instance;
     GameObject player;
@@ -13,7 +15,7 @@ public class GameManager : MonoBehaviour
 
 
     float distance;
-
+    float distanceToTarget;
     void Awake()
     {
         instance = this;
@@ -28,7 +30,9 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        
+        if(player!=null && levelManager!=null)
+            distanceToTarget = Vector3.Distance(player.transform.position, levelManager.GetVictoryObject().transform.position);
+        distanceToTargetText.text = distanceToTarget.ToString("F2");
     }
     void WinEvent(PlayerController pc)
     {
@@ -41,7 +45,7 @@ public class GameManager : MonoBehaviour
                     victoryScreen.SetActive(true);
                 if (maxDistance != null && player!=null)
                 {
-                    maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString();
+                    maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString("F2");
                 }
             }
             else

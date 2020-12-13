@@ -33,4 +33,8 @@ public class LevelManager : MonoBehaviour
     {
         return levelCount;
     }
+    public GameObject GetVictoryObject()
+    {
+        return victoryObject;
+    }
 }
