@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float distanceAdditive;
+    [SerializeField] GameObject victoryScreen;
+    [SerializeField] Text maxDistance;
 
     public static GameManager instance;
     GameObject player;
     LevelManager levelManager;
+
 
     float distance;
 
@@ -19,7 +23,8 @@ public class GameManager : MonoBehaviour
         PlayerController.Win += WinEvent;
         levelManager = FindObjectOfType<LevelManager>();
         player = GameObject.FindGameObjectWithTag("Player");
-        distance = levelManager.GetInitialEndLevelDistance();
+        if (levelManager!=null)
+            distance = levelManager.GetInitialEndLevelDistance();
     }
     void Update()
     {
@@ -27,15 +32,40 @@ public class GameManager : MonoBehaviour
     }
     void WinEvent(PlayerController pc)
     {
-        levelManager.LoadLevel(distance + distanceAdditive);
+        if (levelManager != null)
+        {
+            if (levelManager.GetLevelCount() < 10)
+            {
+                Time.timeScale = 0;
+                if (victoryScreen != null)
+                    victoryScreen.SetActive(true);
+                if (maxDistance != null && player!=null)
+                {
+                    maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString();
+                }
+            }
+            else
+            {
+                //terminar juego
+            }
+        }
     }
-    private void OnDisable()
+    public void OnClickContinue()
+    {
+        distance += distanceAdditive;
+        if (levelManager != null)
+            levelManager.LoadLevel(distance);
+        if(victoryScreen!=null)
+            victoryScreen.SetActive(false);
+        Time.timeScale = 1;
+    }
+    void OnDisable()
     {
         PlayerController.Win -= WinEvent;
         if (instance != null)
              instance = null;
     }
-    private void OnDestroy()
+    void OnDestroy()
     {
         if (instance != null)
             instance = null;

@@ -7,13 +7,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce;
     [SerializeField] float gravity;
 
+    float distanceTraveled = 0;
+    float endDistance;
+
     Vector3 movement;
-    Vector3 jump;
 
     public static event Action<PlayerController> Win;
     void Start()
     {
-
     }
 
     void Update()
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
         Mathf.Clamp(movement.y, -20,10);
         movement = new Vector3(speed, movement.y, transform.position.z);
         movement.y -= gravity * Time.deltaTime;
-        transform.position += movement * Time.deltaTime; 
+        transform.position += movement * Time.deltaTime;
     }
     void Inputs()
     {
@@ -40,6 +41,11 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
+    public float GetDistanceTraveled()
+    {
+        return distanceTraveled;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bounce"))
@@ -51,6 +57,8 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Victory"))
         {
+            distanceTraveled += transform.position.x;
+            endDistance = distanceTraveled;
             Win?.Invoke(this);
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] float initialEndLevelDistance;
-
+    int levelCount = 0;
     GameObject player;
     [SerializeField] GameObject victoryObject;
 
@@ -23,9 +23,14 @@ public class LevelManager : MonoBehaviour
             player.transform.position = Vector3.zero;
             victoryObject.transform.position = new Vector3(player.transform.position.x + distance, 0, 0);
         }
+        levelCount++;
     }
     public float GetInitialEndLevelDistance()
     {
         return initialEndLevelDistance;
+    }
+    public int GetLevelCount()
+    {
+        return levelCount;
     }
 }
