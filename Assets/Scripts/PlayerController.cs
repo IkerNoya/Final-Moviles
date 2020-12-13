@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,8 +9,11 @@ public class PlayerController : MonoBehaviour
 
     Vector3 movement;
     Vector3 jump;
+
+    public static event Action<PlayerController> Win;
     void Start()
     {
+
     }
 
     void Update()
@@ -36,11 +40,18 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bounce"))
         {
             movement.y *= -0.5f; // make it bounce on the top of the screen
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Victory"))
+        {
+            Win?.Invoke(this);
         }
     }
 
