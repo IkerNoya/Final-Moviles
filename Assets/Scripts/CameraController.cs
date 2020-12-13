@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    void Update()
+    void LateUpdate()
     {
         transform.position = new Vector3(player.transform.position.x + offset, transform.position.y, transform.position.z);
     }
