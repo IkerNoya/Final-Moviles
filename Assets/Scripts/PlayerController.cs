@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
 
     public static event Action<PlayerController> Win;
     public static event Action<PlayerController> Die;
-
+    private void Start()
+    {
+        isDead = false;
+    }
     void Update()
     {
         if (isDead)
@@ -77,7 +80,6 @@ public class PlayerController : MonoBehaviour
             distanceTraveled += transform.position.x;
             endDistance = distanceTraveled;
             Win?.Invoke(this);
-            Die?.Invoke(this);
         }
     }
 

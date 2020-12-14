@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        Time.timeScale = 1;
         PlayerController.Win += WinEvent;
         PlayerController.Die += LooseEvent;
         levelManager = FindObjectOfType<LevelManager>();
@@ -66,21 +67,21 @@ public class GameManager : MonoBehaviour
     }
     public void OnClickContinue()
     {
+        Time.timeScale = 1;
         distance += distanceAdditive;
         if (levelManager != null)
             levelManager.LoadLevel(distance);
         if(victoryScreen!=null)
             victoryScreen.SetActive(false);
-        Time.timeScale = 1;
     }
     public void OnClickRestart()
     {
+        Time.timeScale = 1;
         distance = 100;
         if (levelManager != null)
             levelManager.LoadLevel(distance);
         if (gameOverScreen != null)
             gameOverScreen.SetActive(false);
-        Time.timeScale = 1;
     }
     void OnDisable()
     {
