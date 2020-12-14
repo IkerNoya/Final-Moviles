@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] float distanceAdditive;
     [SerializeField] GameObject victoryScreen;
+    [SerializeField] GameObject gameOverScreen;
     [SerializeField] Text maxDistance;
     [SerializeField] Text distanceToTargetText;
 
@@ -12,7 +13,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     GameObject player;
     LevelManager levelManager;
-
 
     float distance;
     float distanceToTarget;
@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         PlayerController.Win += WinEvent;
+        PlayerController.Die += LooseEvent;
         levelManager = FindObjectOfType<LevelManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         if (levelManager!=null)
@@ -38,20 +39,28 @@ public class GameManager : MonoBehaviour
     {
         if (levelManager != null)
         {
-            if (levelManager.GetLevelCount() < 10)
+            Time.timeScale = 0;
+            if (victoryScreen != null)
+                victoryScreen.SetActive(true);
+            if (maxDistance != null && player != null)
             {
-                Time.timeScale = 0;
-                if (victoryScreen != null)
-                    victoryScreen.SetActive(true);
-                if (maxDistance != null && player!=null)
-                {
-                    maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString("F2");
-                }
+                maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString("F2");
             }
-            else
+
+        }
+    }
+    void LooseEvent(PlayerController pc)
+    {
+        if (levelManager != null)
+        {
+            Time.timeScale = 0;
+            if (gameOverScreen != null)
+                gameOverScreen.SetActive(true);
+            if (maxDistance != null && player != null)
             {
-                //terminar juego
+                maxDistance.text = "MAX DISTANCE\n" + player.GetComponent<PlayerController>().GetDistanceTraveled().ToString("F2");
             }
+
         }
     }
     public void OnClickContinue()
@@ -63,9 +72,19 @@ public class GameManager : MonoBehaviour
             victoryScreen.SetActive(false);
         Time.timeScale = 1;
     }
+    public void OnClickRestart()
+    {
+        distance = 100;
+        if (levelManager != null)
+            levelManager.LoadLevel(distance);
+        if (gameOverScreen != null)
+            gameOverScreen.SetActive(false);
+        Time.timeScale = 1;
+    }
     void OnDisable()
     {
         PlayerController.Win -= WinEvent;
+        PlayerController.Die -= LooseEvent;
         if (instance != null)
              instance = null;
     }

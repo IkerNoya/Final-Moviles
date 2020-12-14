@@ -33,7 +33,6 @@ public class ObjectPooler : MonoBehaviour
             for(int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
-                if(obj.CompareTag("Bullet")) obj.SetActive(false);
                 ObjectPool.Enqueue(obj);
             }
             poolDictionary.Add(pool.tag, ObjectPool);
@@ -43,7 +42,7 @@ public class ObjectPooler : MonoBehaviour
     {
         if (!poolDictionary.ContainsKey(tag))
         {
-            Debug.LogWarning("Pool with tag " + tag + "doesn't exist.");
+            Debug.LogWarning("Pool with tag " + tag + " doesn't exist.");
             return null;
         }
 

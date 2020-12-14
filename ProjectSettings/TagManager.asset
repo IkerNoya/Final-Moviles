@@ -7,6 +7,8 @@ TagManager:
   - Bounce
   - Victory
   - LevelManager
+  - Enemy
+  - Obstacle
   layers:
   - Default
   - TransparentFX

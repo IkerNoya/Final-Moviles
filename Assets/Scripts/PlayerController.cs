@@ -12,13 +12,15 @@ public class PlayerController : MonoBehaviour
 
     Vector3 movement;
 
+    bool isDead = false;
+
     public static event Action<PlayerController> Win;
-    void Start()
-    {
-    }
+    public static event Action<PlayerController> Die;
 
     void Update()
     {
+        if (isDead)
+            return;
         Inputs();
         Mathf.Clamp(movement.y, -20,10);
         movement = new Vector3(speed, movement.y, transform.position.z);
@@ -45,13 +47,28 @@ public class PlayerController : MonoBehaviour
     {
         return distanceTraveled;
     }
-
+    public bool GetIsDead()
+    {
+        return isDead;
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bounce"))
         {
             movement.y *= -0.5f; // make it bounce on the top of the screen
         }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Die?.Invoke(this);
+            isDead = true;
+        }
+    }
+    public void Respawn()
+    {
+        transform.position = Vector3.zero;
+        distanceTraveled = endDistance;
+        movement.y = 0;
+        isDead = false;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -60,11 +77,13 @@ public class PlayerController : MonoBehaviour
             distanceTraveled += transform.position.x;
             endDistance = distanceTraveled;
             Win?.Invoke(this);
+            Die?.Invoke(this);
         }
     }
 
     void OnBecameInvisible()
     {
-        //murio xd
+        isDead = false;
+        Die?.Invoke(this);
     }
 }
