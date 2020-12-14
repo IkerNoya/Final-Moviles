@@ -9,6 +9,7 @@ TagManager:
   - LevelManager
   - Enemy
   - Obstacle
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -19,9 +20,9 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
-  - 
+  - Background
+  - MidGround
+  - Foreground
   - 
   - 
   - 
@@ -45,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: foreground
+    uniqueID: 3229585123
     locked: 0
